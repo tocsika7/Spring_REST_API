@@ -20,11 +20,11 @@ public class CustomerDaoImpl implements CustomerDao {
     public Collection<Customer> readAll() {
         return StreamSupport.stream(customerRepository.findAll().spliterator(),false)
                 .map(entity -> new Customer(
-                        entity.getStore().getStoreId(),
+                        entity.getStore().toString(),
                         entity.getFirstName(),
                         entity.getLastName(),
                         entity.getEmail(),
-                        entity.getAddressId(),
+                        entity.getAddress().toString(),
                         entity.getActive()
 
                 ))

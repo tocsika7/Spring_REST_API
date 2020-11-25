@@ -19,11 +19,13 @@ public class StoreEntity {
     @Column(name = "store_id")
     private int storeId;
 
-    @Column(name = "manager_staff_id")
-    private int managerStaffId;
+    @ManyToOne
+    @JoinColumn(name = "manager_staff_id")
+    private StaffEntity staff;
 
-    @Column(name = "address_id")
-    private int addressId;
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private AddressEntity address;
 
     @Column(name = "last_update")
     private Timestamp lastUpdate;
