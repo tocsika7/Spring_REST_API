@@ -20,8 +20,9 @@ public class CustomerEntity {
     @Column(name = "customer_id")
     private int id;
 
-    @Column(name = "store_id")
-    private int storeId;
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private StoreEntity store;
 
     @Column(name = "first_name")
     private String firstName;

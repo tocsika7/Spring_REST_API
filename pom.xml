@@ -74,11 +74,6 @@
       <artifactId>jaxb-api</artifactId>
       <version>2.3.1</version>
     </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-spatial</artifactId>
-      <version>5.4.24.FINAL</version>
-    </dependency>
     <!-- API, java.xml.bind module -->
     <dependency>
       <groupId>jakarta.xml.bind</groupId>
@@ -93,7 +88,6 @@
       <version>2.3.2</version>
     </dependency>
   </dependencies>
-
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
