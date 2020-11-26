@@ -10,29 +10,27 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "staff_list", schema = "sakila")
+@Table(name = "staff", schema = "sakila")
 public class StaffEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private int managerStaffId;
+    @Column(name = "staff_id")
+    private int staffId;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column(name = "address")
-    private String address;
+    @Column(name = "last_name")
+    private String lastName;
 
-    @Column(name = "phone")
-    private String phone;
+    @Column(name = "email")
+    private String email;
 
-    @Column(name = "city")
-    private String city;
+    @Column(name = "address_id")
+    private int addressId;
 
-    @Column(name = "country")
-    private String country;
+    @Column(name = "store_id")
+    private int storeId;
 
-    @Column(name = "SID")
-    private int SID;
 }
