@@ -20,22 +20,23 @@ public class AddressEntity {
     @Column(name="address_id")
     private int id;
 
-    @Column
+    @Column(name = "address")
     private String address;
 
-    @Column
+    @Column(name = "address2")
     private String address2;
 
-    @Column
+    @Column(name = "district")
     private String district;
 
-    @Column(name="city_id")
-    private String city;
+    @ManyToOne
+    @JoinColumn(name="city_id")
+    private CityEntity city;
 
     @Column(name = "postal_code")
     private String postalCode;
 
-    @Column
+    @Column(name = "phone")
     private String phone;
 
     @Column(name="last_update")

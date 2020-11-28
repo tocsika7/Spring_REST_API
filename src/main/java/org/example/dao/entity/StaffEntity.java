@@ -27,8 +27,9 @@ public class StaffEntity {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "address_id")
-    private int addressId;
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private AddressEntity address;
 
     @Column(name = "store_id")
     private int storeId;
