@@ -3,8 +3,10 @@ package org.example.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.controller.dto.CustomerDto;
+import org.example.model.Customer;
 import org.example.service.CustomerService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
@@ -29,5 +31,17 @@ public class CustomerController {
                         .active(model.getActive())
                     .build())
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/customer/{id}")
+    public CustomerDto getOneCustomer(@PathVariable("id") int customerId)  {
+        Customer customer = service.getCustomer(customerId);
+        return CustomerDto.builder()
+                .storeId(customer.getStoreId())
+                .firstName(customer.getFirstName())
+                .lastName(customer.getLastName())
+                .addressId(customer.getAddressId())
+                .active(customer.getActive())
+                .build();
     }
 }
