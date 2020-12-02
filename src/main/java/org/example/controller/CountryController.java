@@ -3,14 +3,13 @@ package org.example.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.controller.dto.CountryDto;
+import org.example.exception.CountryInUseException;
 import org.example.exception.InvalidCountryException;
+import org.example.exception.UnknownCountryException;
 import org.example.model.Country;
 import org.example.service.CountryService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
@@ -41,6 +40,19 @@ public class CountryController {
             ));
         } catch (InvalidCountryException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/country")
+    public void deleteCountry(@RequestBody CountryDto countryDto){
+        try{
+            countryService.deleteCountry(new Country(countryDto.getCountry()));
+        }
+        catch (UnknownCountryException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+        catch (CountryInUseException e){
+            throw  new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 }

@@ -3,7 +3,9 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dao.CountryDao;
+import org.example.exception.CountryInUseException;
 import org.example.exception.InvalidCountryException;
+import org.example.exception.UnknownCountryException;
 import org.example.model.Country;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +26,10 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public void recordCounty(Country country) throws InvalidCountryException {
         countryDao.createCountry(country);
+    }
+
+    @Override
+    public void deleteCountry(Country country) throws UnknownCountryException, CountryInUseException {
+        countryDao.deleteCountry(country);
     }
 }

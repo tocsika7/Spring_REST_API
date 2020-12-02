@@ -3,13 +3,17 @@ package org.example.dao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dao.entity.CountryEntity;
+import org.example.exception.CountryInUseException;
 import org.example.exception.InvalidCountryException;
+import org.example.exception.UnknownCountryException;
 import org.example.model.Country;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -43,6 +47,22 @@ public class CountryDaoImpl implements CountryDao {
         } catch (Exception e){
             log.error(e.getMessage());
             throw new InvalidCountryException("Invalid country name");
+        }
+    }
+
+    // TODO Fix SQLIntegrityConstraintViolationException
+    @Override
+    public void deleteCountry(Country country) throws UnknownCountryException, CountryInUseException {
+        Optional<CountryEntity> countryEntity = StreamSupport.stream(countryRepository.findAll().spliterator(),false)
+                .filter(entity -> country.getCountry().equals(entity.getCountry())).findAny();
+        if(countryEntity.isEmpty()){
+            throw new UnknownCountryException(String.format("Country not found: %s", country));
+        }
+        try {
+            countryRepository.delete(countryEntity.get());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new CountryInUseException("Country is used in an other table");
         }
     }
 }
