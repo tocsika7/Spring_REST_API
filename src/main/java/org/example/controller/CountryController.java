@@ -3,6 +3,7 @@ package org.example.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.controller.dto.CountryDto;
+import org.example.controller.dto.CountryUpdateDto;
 import org.example.exception.CountryInUseException;
 import org.example.exception.InvalidCountryException;
 import org.example.exception.UnknownCountryException;
@@ -54,5 +55,16 @@ public class CountryController {
         catch (CountryInUseException e){
             throw  new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
+    }
+
+    @PutMapping("/country")
+    public void updateCountry(@RequestBody CountryUpdateDto countryUpdateDto){
+        try{
+            countryService.updateCountry(new Country(countryUpdateDto.getCountry()),new Country(countryUpdateDto.getNewCountry()));
+        }
+        catch (InvalidCountryException | UnknownCountryException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+
     }
 }

@@ -12,4 +12,5 @@ public interface CountryDao {
     Collection<Country> readAll();
     void createCountry(Country country) throws InvalidCountryException;
     void deleteCountry(Country country) throws UnknownCountryException, CountryInUseException;
+    void updateCountry(Country country, Country newCountry) throws UnknownCountryException, InvalidCountryException;
 }

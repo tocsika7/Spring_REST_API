@@ -9,7 +9,6 @@ import org.example.exception.UnknownCountryException;
 import org.example.model.Country;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
@@ -23,6 +22,11 @@ import java.util.stream.StreamSupport;
 public class CountryDaoImpl implements CountryDao {
 
     private final CountryRepository countryRepository;
+
+    private Optional<CountryEntity> queryCountry(Country country){
+        return StreamSupport.stream(countryRepository.findAll().spliterator(),false)
+                .filter(entity -> country.getCountry().equals(entity.getCountry())).findAny();
+    }
 
     @Override
     public Collection<Country> readAll() {
@@ -50,11 +54,9 @@ public class CountryDaoImpl implements CountryDao {
         }
     }
 
-    // TODO Fix SQLIntegrityConstraintViolationException
     @Override
     public void deleteCountry(Country country) throws UnknownCountryException, CountryInUseException {
-        Optional<CountryEntity> countryEntity = StreamSupport.stream(countryRepository.findAll().spliterator(),false)
-                .filter(entity -> country.getCountry().equals(entity.getCountry())).findAny();
+        Optional<CountryEntity> countryEntity = queryCountry(country);
         if(countryEntity.isEmpty()){
             throw new UnknownCountryException(String.format("Country not found: %s", country));
         }
@@ -63,6 +65,28 @@ public class CountryDaoImpl implements CountryDao {
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new CountryInUseException("Country is used in an other table");
+        }
+    }
+
+    @Override
+    public void updateCountry(Country country, Country newCountry) throws UnknownCountryException, InvalidCountryException {
+        Optional<CountryEntity> countryEntity = queryCountry(country);
+        if(countryEntity.isEmpty()){
+            throw new UnknownCountryException(String.format("Country not found: %s", country));
+        }
+        else {
+            CountryEntity newCountryEntity = CountryEntity.builder()
+                    .countryId(countryEntity.get().getCountryId())
+                    .country(newCountry.getCountry())
+                    .lastUpdate(new Timestamp(new Date().getTime()))
+                    .build();
+            log.info("CountryEntity Created: {}", countryEntity);
+            try {
+                countryRepository.save(newCountryEntity);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                throw new InvalidCountryException("Invalid country name");
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @ToString
 @Entity
+@Getter
 @Table(name = "country", schema = "sakila")
 public class CountryEntity {
 
