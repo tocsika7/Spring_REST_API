@@ -1,4 +1,4 @@
-package org.example.dao;
+package org.example.dao.country;
 
 import org.example.dao.entity.CountryEntity;
 import org.springframework.data.repository.CrudRepository;

@@ -1,4 +1,4 @@
-package org.example.exception;
+package org.example.exception.country;
 
 public class InvalidCountryException extends Exception {
 

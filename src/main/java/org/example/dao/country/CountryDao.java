@@ -1,8 +1,8 @@
-package org.example.dao;
+package org.example.dao.country;
 
-import org.example.exception.CountryInUseException;
-import org.example.exception.InvalidCountryException;
-import org.example.exception.UnknownCountryException;
+import org.example.exception.country.CountryInUseException;
+import org.example.exception.country.InvalidCountryException;
+import org.example.exception.country.UnknownCountryException;
 import org.example.model.Country;
 
 import java.util.Collection;

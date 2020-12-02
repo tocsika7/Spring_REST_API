@@ -1,9 +1,8 @@
-package org.example.dao;
+package org.example.dao.customer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dao.entity.CustomerEntity;
-import org.example.exception.UnkownCustomerException;
 import org.example.model.Customer;
 import org.springframework.stereotype.Service;
 

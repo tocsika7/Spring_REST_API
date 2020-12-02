@@ -1,11 +1,11 @@
-package org.example.dao;
+package org.example.dao.country;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dao.entity.CountryEntity;
-import org.example.exception.CountryInUseException;
-import org.example.exception.InvalidCountryException;
-import org.example.exception.UnknownCountryException;
+import org.example.exception.country.CountryInUseException;
+import org.example.exception.country.InvalidCountryException;
+import org.example.exception.country.UnknownCountryException;
 import org.example.model.Country;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class CountryDaoImpl implements CountryDao {
 
     private Optional<CountryEntity> queryCountry(Country country){
         return StreamSupport.stream(countryRepository.findAll().spliterator(),false)
-                .filter(entity -> country.getCountry().equals(entity.getCountry())).findAny();
+                .filter(entity -> country.getCountry().equals(entity.getCountry())).findFirst();
     }
 
     @Override

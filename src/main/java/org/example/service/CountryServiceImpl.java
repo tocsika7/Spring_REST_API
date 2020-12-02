@@ -2,10 +2,10 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dao.CountryDao;
-import org.example.exception.CountryInUseException;
-import org.example.exception.InvalidCountryException;
-import org.example.exception.UnknownCountryException;
+import org.example.dao.country.CountryDao;
+import org.example.exception.country.CountryInUseException;
+import org.example.exception.country.InvalidCountryException;
+import org.example.exception.country.UnknownCountryException;
 import org.example.model.Country;
 import org.springframework.stereotype.Service;
 
