@@ -3,9 +3,15 @@ package org.example.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.controller.dto.CityDto;
+import org.example.exception.city.CityInUseException;
+import org.example.exception.city.InvalidCityException;
+import org.example.exception.city.UnknownCityException;
+import org.example.exception.country.UnknownCountryException;
+import org.example.model.City;
 import org.example.service.CityService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -26,6 +32,32 @@ public class CityController {
                         .country(model.getCountry())
                         .build()
                 ).collect(Collectors.toList());
+    }
+
+    @PostMapping("/city")
+    public void recordCity(@RequestBody CityDto cityDto){
+        try {
+            cityService.recordCity(new City(cityDto.getCity(), cityDto.getCountry()));
+        }
+        catch (InvalidCityException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid city");
+        }
+        catch (UnknownCountryException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown country");
+        }
+
+
+    }
+
+    @DeleteMapping("/city")
+    public void deleteCity(@RequestBody CityDto cityDto){
+        try {
+            cityService.deleteCity(new City(cityDto.getCity(), cityDto.getCountry()));
+        } catch (CityInUseException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnknownCityException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
 }
