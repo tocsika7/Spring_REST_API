@@ -1,6 +1,5 @@
 package org.example.dao;
 
-import org.example.exception.UnkownCustomerException;
 import org.example.model.Customer;
 
 import java.util.Collection;
