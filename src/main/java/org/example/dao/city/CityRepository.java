@@ -1,4 +1,7 @@
 package org.example.dao.city;
 
-public interface CityRepository {
+import org.example.dao.entity.CityEntity;
+import org.springframework.data.repository.CrudRepository;
+
+public interface CityRepository extends CrudRepository<CityEntity, Integer> {
 }
