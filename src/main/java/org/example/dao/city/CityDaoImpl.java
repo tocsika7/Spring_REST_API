@@ -82,4 +82,28 @@ public class CityDaoImpl implements CityDao {
         }
 
     }
+
+    @Override
+    public void updateCity(String cityName, City newCity) throws UnknownCityException, UnknownCountryException, InvalidCityException {
+        Optional<CityEntity> cityEntity = Optional.ofNullable(cityRepository.findCityEntityByCity(cityName));
+        if(cityEntity.isEmpty()){
+            throw new UnknownCityException("City not found");
+        }
+        else {
+            CityEntity newCityEntity = CityEntity.builder()
+                    .cityId(cityEntity.get().getCityId())
+                    .city(newCity.getCity())
+                    .country(queryCountry(newCity.getCountry()))
+                    .lastUpdate(new Timestamp((new Date()).getTime()))
+                    .build();
+            log.info("CityEntity Updated:" + newCityEntity.toString());
+            try{
+                cityRepository.save(newCityEntity);
+            } catch (Exception e){
+                log.error("Error while updating city: " + e.getMessage());
+                throw new InvalidCityException();
+            }
+        }
+
+    }
 }

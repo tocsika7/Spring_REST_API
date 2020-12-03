@@ -33,4 +33,9 @@ public class CityServiceImpl implements CityService {
     public void deleteCity(City city) throws UnknownCityException, CityInUseException {
         cityDao.deleteCity(city);
     }
+
+    @Override
+    public void updateCity(String cityName, City newCity) throws InvalidCityException, UnknownCityException, UnknownCountryException {
+        cityDao.updateCity(cityName, newCity);
+    }
 }

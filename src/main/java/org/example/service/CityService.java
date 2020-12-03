@@ -13,4 +13,5 @@ public interface CityService {
     Collection<City> getAllCities();
     void recordCity(City city) throws UnknownCountryException, InvalidCityException;
     void deleteCity(City city) throws UnknownCityException, CityInUseException;
+    void updateCity(String cityName, City newCity) throws InvalidCityException, UnknownCityException, UnknownCountryException;
 }

@@ -13,4 +13,5 @@ public interface CityDao {
     Collection<City> readAll();
     void createCity(City city) throws UnknownCountryException, InvalidCityException;
     void deleteCity(City city) throws UnknownCityException, CityInUseException;
+    void updateCity(String cityName, City newCity) throws UnknownCityException, UnknownCountryException, InvalidCityException;
 }

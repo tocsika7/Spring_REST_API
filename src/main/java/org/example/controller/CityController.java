@@ -3,6 +3,7 @@ package org.example.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.controller.dto.CityDto;
+import org.example.controller.dto.CityUpdateDto;
 import org.example.exception.city.CityInUseException;
 import org.example.exception.city.InvalidCityException;
 import org.example.exception.city.UnknownCityException;
@@ -58,6 +59,23 @@ public class CityController {
         } catch (UnknownCityException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+    }
+
+    @PutMapping("/city")
+    public void updateCity(@RequestBody CityUpdateDto cityUpdateDto){
+        try {
+            cityService.updateCity(
+                    cityUpdateDto.getCity(),
+                    new City(cityUpdateDto.getNewCity(),
+                            cityUpdateDto.getNewCountry()));
+        } catch (UnknownCountryException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (UnknownCityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (InvalidCityException e) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, e.getMessage());
+        }
+
     }
 
 }
