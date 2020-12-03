@@ -3,6 +3,7 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dao.address.AddressDao;
+import org.example.exception.city.UnknownCityException;
 import org.example.model.Address;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +19,10 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Collection<Address> getAll() {
         return addressDao.readAll();
+    }
+
+    @Override
+    public void createAddress(Address address) throws UnknownCityException {
+        addressDao.createAddress(address);
     }
 }

@@ -2,6 +2,7 @@ package org.example.dao.entity;
 
 
 import lombok.*;
+import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -38,6 +39,9 @@ public class AddressEntity {
 
     @Column(name = "phone")
     private String phone;
+
+    @Column(columnDefinition = "geometry")
+    private Point location;
 
     @Column(name="last_update")
     private Timestamp lastUpdate;
