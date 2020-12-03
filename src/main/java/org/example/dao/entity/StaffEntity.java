@@ -1,8 +1,11 @@
 package org.example.dao.entity;
 
 import lombok.*;
+import org.hibernate.type.BlobType;
 
 import javax.persistence.*;
+import java.sql.Blob;
+import java.sql.Timestamp;
 
 @Data
 @Builder
@@ -24,14 +27,34 @@ public class StaffEntity {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email")
-    private String email;
-
     @ManyToOne
     @JoinColumn(name = "address_id")
     private AddressEntity address;
 
-    @Column(name = "store_id")
-    private int storeId;
+    @Column(name = "picture")
+    private Blob picture;
+
+    @Column(name = "email")
+    private String email;
+
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private StoreEntity store;
+
+    @Column(name = "active")
+    private int active;
+
+    @Column(name = "username")
+    private String userName;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "last_update")
+    private Timestamp lastUpdate;
+
+
+
+
 
 }
