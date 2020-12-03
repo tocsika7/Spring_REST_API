@@ -4,13 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CityUpdateDto {
+public class AddressUpdateDto extends AddressDto {
 
-    private String city;
-    private String newCity;
-    private String newCountry;
+    private String oldAddress;
 }

@@ -3,7 +3,9 @@ package org.example.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.controller.dto.AddressDto;
+import org.example.controller.dto.AddressUpdateDto;
 import org.example.exception.address.AddressInUseException;
+import org.example.exception.address.InvalidAddressException;
 import org.example.exception.address.UnknownAddressException;
 import org.example.exception.city.UnknownCityException;
 import org.example.model.Address;
@@ -68,5 +70,25 @@ public class AddressController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (UnknownAddressException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage()); }
+    }
+
+    @PutMapping("/address")
+    public void updateAddress(@RequestBody AddressUpdateDto addressDto){
+        try{
+            addressService.updateAddress(addressDto.getOldAddress(),new Address(
+                    addressDto.getAddress(),
+                    addressDto.getAddress2(),
+                    addressDto.getDistrict(),
+                    addressDto.getCityName(),
+                    addressDto.getPostalCode(),
+                    addressDto.getPhone()
+            ));
+        } catch (UnknownAddressException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (UnknownCityException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (InvalidAddressException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 }

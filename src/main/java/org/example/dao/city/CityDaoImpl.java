@@ -85,7 +85,7 @@ public class CityDaoImpl implements CityDao {
 
     @Override
     public void updateCity(String cityName, City newCity) throws UnknownCityException, UnknownCountryException, InvalidCityException {
-        Optional<CityEntity> cityEntity = Optional.ofNullable(cityRepository.findCityEntityByCity(cityName));
+        Optional<CityEntity> cityEntity = Optional.ofNullable(cityRepository.findFirstByCity(cityName));
         if(cityEntity.isEmpty()){
             throw new UnknownCityException("City not found");
         }
