@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.type.BlobType;
 
 import javax.persistence.*;
+import javax.sql.rowset.serial.SerialBlob;
 import java.sql.Blob;
 import java.sql.Timestamp;
 

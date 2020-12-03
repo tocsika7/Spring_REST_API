@@ -3,9 +3,17 @@ package org.example.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.controller.dto.StaffDto;
+import org.example.controller.dto.StaffRecordDto;
+import org.example.exception.address.UnknownAddressException;
+import org.example.exception.store.UnknownStoreException;
+import org.example.model.Staff;
 import org.example.service.StaffService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -29,5 +37,23 @@ public class StaffController {
                     .storeAddress(model.getStoreAddress())
                     .build()
                 ).collect(Collectors.toList());
+    }
+
+    @PostMapping("/staff")
+    public void recordStaffMember(@RequestBody StaffRecordDto staffDto) {
+        try {
+            staffService.createStaffMember(new Staff(
+                    staffDto.getFirstName(),
+                    staffDto.getLastName(),
+                    staffDto.getAddress(),
+                    staffDto.getEmail(),
+                    staffDto.getStoreAddress(),
+                    staffDto.getUserName(),
+                    staffDto.getPassword(),
+                    staffDto.getActive()
+            ));
+        } catch (UnknownAddressException | UnknownStoreException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 }
