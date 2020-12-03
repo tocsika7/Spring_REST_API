@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.dao.city.CityRepository;
 import org.example.dao.entity.AddressEntity;
 import org.example.dao.entity.CityEntity;
+import org.example.exception.address.AddressInUseException;
+import org.example.exception.address.UnknownAddressException;
 import org.example.exception.city.UnknownCityException;
 import org.example.model.Address;
 import org.locationtech.jts.geom.Coordinate;
@@ -67,6 +69,22 @@ public class AddressDaoImpl implements AddressDao {
             addressRepository.save(addressEntity);
         } catch (Exception e){
             log.error(e.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteAddress(Address address) throws UnknownAddressException, AddressInUseException {
+        Optional<AddressEntity> addressEntity = Optional.
+                ofNullable(addressRepository.
+                findAddressEntityByAddress(address.getAddress()));
+        if(addressEntity.isEmpty()){
+            throw new UnknownAddressException("Address not found");
+        }
+        try {
+            addressRepository.delete(addressEntity.get());
+        } catch (Exception e){
+            log.error("Error while deleting Address: " + e.getMessage());
+            throw new AddressInUseException("Address used by an other table" + address.getAddress());
         }
     }
 }

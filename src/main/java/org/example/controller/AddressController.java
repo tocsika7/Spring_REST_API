@@ -3,14 +3,13 @@ package org.example.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.controller.dto.AddressDto;
+import org.example.exception.address.AddressInUseException;
+import org.example.exception.address.UnknownAddressException;
 import org.example.exception.city.UnknownCityException;
 import org.example.model.Address;
 import org.example.service.AddressService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
@@ -52,5 +51,22 @@ public class AddressController {
         } catch (UnknownCityException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid city");
         }
+    }
+
+    @DeleteMapping("/address")
+    public void deleteAddress(@RequestBody AddressDto addressDto){
+        try {
+            addressService.deleteAddress(new Address(
+                    addressDto.getAddress(),
+                    addressDto.getAddress2(),
+                    addressDto.getDistrict(),
+                    addressDto.getCityName(),
+                    addressDto.getPostalCode(),
+                    addressDto.getPhone()
+            ));
+        } catch (AddressInUseException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnknownAddressException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage()); }
     }
 }
