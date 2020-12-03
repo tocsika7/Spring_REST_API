@@ -8,6 +8,7 @@ import org.example.dao.entity.StaffEntity;
 import org.example.dao.entity.StoreEntity;
 import org.example.dao.store.StoreRepository;
 import org.example.exception.address.UnknownAddressException;
+import org.example.exception.staff.StaffInUseException;
 import org.example.exception.staff.UnknownStaffException;
 import org.example.exception.store.UnknownStoreException;
 import org.example.model.Staff;
@@ -134,6 +135,22 @@ public class StaffDaoImpl implements StaffDao {
             } catch (SQLException e){
                 log.error("Blob Factory error: " + e.getMessage());
             }
+        }
+    }
+
+    @Override
+    public void deleteStaffMember(int staffId) throws UnknownStaffException, StaffInUseException {
+        Optional<StaffEntity> staffEntity = staffRepository.findById(staffId);
+        if(staffEntity.isEmpty()) {
+            throw new UnknownStaffException(String.format
+                    ("Staff member with id:%d not found", staffId));
+        }
+        try {
+            staffRepository.delete(staffEntity.get());
+        } catch (Exception e) {
+            log.error("Error while deleting staff member." + e.getMessage());
+            throw new StaffInUseException(String.format
+                    ("Staff member with id:%d is used by another table", staffId));
         }
     }
 }

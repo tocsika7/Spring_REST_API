@@ -6,6 +6,7 @@ import org.example.controller.dto.StaffDto;
 import org.example.controller.dto.StaffRecordDto;
 import org.example.controller.dto.StaffUpdateDto;
 import org.example.exception.address.UnknownAddressException;
+import org.example.exception.staff.StaffInUseException;
 import org.example.exception.staff.UnknownStaffException;
 import org.example.exception.store.UnknownStoreException;
 import org.example.model.Staff;
@@ -70,6 +71,15 @@ public class StaffController {
                     staffUpdateDto.getActive()
             ));
         } catch (UnknownAddressException | UnknownStoreException | UnknownStaffException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/staff")
+    public void deleteStaffMember(@RequestParam(name = "staffId", defaultValue = "1", required = true) int staffId){
+        try {
+            staffService.deleteStaffMember(staffId);
+        } catch (UnknownStaffException | StaffInUseException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
