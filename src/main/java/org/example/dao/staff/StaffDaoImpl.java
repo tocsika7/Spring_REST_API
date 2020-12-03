@@ -8,6 +8,7 @@ import org.example.dao.entity.StaffEntity;
 import org.example.dao.entity.StoreEntity;
 import org.example.dao.store.StoreRepository;
 import org.example.exception.address.UnknownAddressException;
+import org.example.exception.staff.UnknownStaffException;
 import org.example.exception.store.UnknownStoreException;
 import org.example.model.Staff;
 import org.springframework.stereotype.Service;
@@ -77,7 +78,6 @@ public class StaffDaoImpl implements StaffDao {
     @Override
     public void createStaffMember(Staff staff) throws UnknownAddressException, UnknownStoreException {
         StaffEntity staffEntity;
-        byte[] blobBytes = new byte[16];
         try {
             staffEntity = StaffEntity.builder()
                     .firstName(staff.getFirstName())
@@ -99,6 +99,41 @@ public class StaffDaoImpl implements StaffDao {
             }
         } catch (SQLException e) {
             log.error("Blob factory error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void updateStaffMember(int staffId, Staff staff) throws UnknownStaffException, UnknownAddressException, UnknownStoreException {
+        Optional<StaffEntity> staffEntity = staffRepository.findById(staffId);
+        if(staffEntity.isEmpty()){
+            log.error(String.format("Staff with id:%d not found", staffId));
+            throw new UnknownStaffException(
+                    String.format("Staff with id:%d not found", staffId));
+        }
+        else {
+            try {
+                StaffEntity newStaffEntity = StaffEntity.builder()
+                        .staffId(staffId)
+                        .firstName(staff.getFirstName())
+                        .lastName(staff.getLastName())
+                        .address(queryAddress(staff.getAddress()))
+                        .email(staff.getEmail())
+                        .store(queryStore(staff.getStoreAddress()))
+                        .userName(staff.getUserName())
+                        .password(staff.getPassword())
+                        .picture(blobFactory())
+                        .active(staff.getActive())
+                        .lastUpdate(new Timestamp(new Date().getTime()))
+                        .build();
+                log.info(String.format("Staff Member updated with id: %d", staffId));
+                try{
+                    staffRepository.save(newStaffEntity);
+                } catch (Exception e) {
+                    log.error("Error while updating Staff Member: " + e.getMessage());
+                }
+            } catch (SQLException e){
+                log.error("Blob Factory error: " + e.getMessage());
+            }
         }
     }
 }

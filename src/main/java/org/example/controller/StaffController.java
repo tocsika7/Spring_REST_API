@@ -4,15 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.controller.dto.StaffDto;
 import org.example.controller.dto.StaffRecordDto;
+import org.example.controller.dto.StaffUpdateDto;
 import org.example.exception.address.UnknownAddressException;
+import org.example.exception.staff.UnknownStaffException;
 import org.example.exception.store.UnknownStoreException;
 import org.example.model.Staff;
 import org.example.service.StaffService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
@@ -53,6 +52,24 @@ public class StaffController {
                     staffDto.getActive()
             ));
         } catch (UnknownAddressException | UnknownStoreException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PutMapping("/staff")
+    public void updateStaffMember(@RequestBody StaffUpdateDto staffUpdateDto){
+        try {
+            staffService.updateStaffMember(staffUpdateDto.getStaffId(), new Staff(
+                    staffUpdateDto.getFirstName(),
+                    staffUpdateDto.getLastName(),
+                    staffUpdateDto.getAddress(),
+                    staffUpdateDto.getEmail(),
+                    staffUpdateDto.getStoreAddress(),
+                    staffUpdateDto.getUserName(),
+                    staffUpdateDto.getPassword(),
+                    staffUpdateDto.getActive()
+            ));
+        } catch (UnknownAddressException | UnknownStoreException | UnknownStaffException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
