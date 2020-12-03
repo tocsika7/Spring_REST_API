@@ -20,7 +20,9 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public Collection<Customer> readAll() {
-        return StreamSupport.stream(customerRepository.findAll().spliterator(),false)
+        return null;
+                /*
+                StreamSupport.stream(customerRepository.findAll().spliterator(),false)
                 .map(entity -> new Customer(
                         entity.getStore().getStoreId(),
                         entity.getFirstName(),
@@ -30,12 +32,12 @@ public class CustomerDaoImpl implements CustomerDao {
                         entity.getActive()
 
                 ))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
     }
 
     @Override
     public Customer readOne(int customerId){
-
+            /*
             Optional<CustomerEntity> customerEntity = customerRepository.findById(customerId);
             if(customerEntity.isPresent()) {
                 return customerEntity.map(entity -> new Customer(
@@ -46,7 +48,7 @@ public class CustomerDaoImpl implements CustomerDao {
                         entity.getAddress().getId(),
                         entity.getActive()
                 )).get();
-            }
+            }*/
             return null;
     }
 }
