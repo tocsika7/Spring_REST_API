@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CustomerDto {
 
-    private int storeId;
+    private String storeAddress;
     private String firstName;
     private String lastName;
-    private int addressId;
+    private String address;
     private int active;
 }

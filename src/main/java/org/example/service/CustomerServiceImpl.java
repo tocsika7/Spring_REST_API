@@ -20,9 +20,5 @@ public class CustomerServiceImpl implements CustomerService {
         return customerDao.readAll();
     }
 
-    @Override
-    public Customer getCustomer(int customerId) {
-        return customerDao.readOne(customerId);
-    }
 
 }

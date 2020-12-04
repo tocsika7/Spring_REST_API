@@ -7,5 +7,4 @@ import java.util.Collection;
 public interface CustomerDao {
 
     Collection<Customer> readAll();
-    Customer readOne(int customerId);
 }

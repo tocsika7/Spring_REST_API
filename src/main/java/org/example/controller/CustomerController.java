@@ -24,24 +24,14 @@ public class CustomerController {
         return service.getAllCustomers()
                 .stream()
                 .map(model -> CustomerDto.builder()
-                        .storeId(model.getStoreId())
+                        .storeAddress(model.getStoreAddress())
                         .firstName(model.getFirstName())
                         .lastName(model.getLastName())
-                        .addressId(model.getAddressId())
+                        .address(model.getAddress())
                         .active(model.getActive())
                     .build())
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/customer/{id}")
-    public CustomerDto getOneCustomer(@PathVariable("id") int customerId)  {
-        Customer customer = service.getCustomer(customerId);
-        return CustomerDto.builder()
-                .storeId(customer.getStoreId())
-                .firstName(customer.getFirstName())
-                .lastName(customer.getLastName())
-                .addressId(customer.getAddressId())
-                .active(customer.getActive())
-                .build();
-    }
+
 }

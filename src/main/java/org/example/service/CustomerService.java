@@ -8,5 +8,4 @@ import java.util.Collection;
 public interface CustomerService {
 
     Collection<Customer> getAllCustomers();
-    Customer getCustomer(int customerId);
 }

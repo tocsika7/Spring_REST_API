@@ -20,35 +20,17 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public Collection<Customer> readAll() {
-        return null;
-                /*
-                StreamSupport.stream(customerRepository.findAll().spliterator(),false)
+        return StreamSupport.stream(customerRepository.findAll().spliterator(),false)
                 .map(entity -> new Customer(
-                        entity.getStore().getStoreId(),
+                        entity.getStore().getAddress().getAddress(),
                         entity.getFirstName(),
                         entity.getLastName(),
                         entity.getEmail(),
-                        entity.getAddress().getId(),
+                        entity.getAddress().getAddress(),
                         entity.getActive()
 
                 ))
-                .collect(Collectors.toList());*/
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public Customer readOne(int customerId){
-            /*
-            Optional<CustomerEntity> customerEntity = customerRepository.findById(customerId);
-            if(customerEntity.isPresent()) {
-                return customerEntity.map(entity -> new Customer(
-                        entity.getStore().getStoreId(),
-                        entity.getFirstName(),
-                        entity.getLastName(),
-                        entity.getEmail(),
-                        entity.getAddress().getId(),
-                        entity.getActive()
-                )).get();
-            }*/
-            return null;
-    }
 }
