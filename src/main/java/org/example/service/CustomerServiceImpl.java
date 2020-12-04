@@ -3,6 +3,8 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dao.customer.CustomerDao;
+import org.example.exception.address.UnknownAddressException;
+import org.example.exception.store.UnknownStoreException;
 import org.example.model.Customer;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Collection<Customer> getAllCustomers() {
         return customerDao.readAll();
+    }
+
+    @Override
+    public void createCustomer(Customer customer) throws UnknownAddressException, UnknownStoreException {
+        customerDao.createCustomer(customer);
     }
 
 
