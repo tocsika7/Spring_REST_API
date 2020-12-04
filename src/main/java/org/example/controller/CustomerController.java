@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.controller.dto.CustomerDto;
 import org.example.exception.address.UnknownAddressException;
+import org.example.exception.customer.CustomerInUseException;
+import org.example.exception.customer.UnkownCustomerException;
 import org.example.exception.store.UnknownStoreException;
 import org.example.model.Customer;
 import org.example.service.CustomerService;
@@ -48,6 +50,15 @@ public class CustomerController {
                     customerDto.getActive()
             ));
         } catch (UnknownAddressException | UnknownStoreException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/customer")
+    public void deleteCustomer(@RequestParam(name = "email", defaultValue = "example@test.com", required = true) String email){
+        try {
+            service.deleteCustomer(email);
+        } catch (UnkownCustomerException | CustomerInUseException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

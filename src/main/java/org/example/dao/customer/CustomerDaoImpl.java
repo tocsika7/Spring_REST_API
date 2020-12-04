@@ -7,6 +7,8 @@ import org.example.dao.entity.AddressEntity;
 import org.example.dao.entity.CustomerEntity;
 import org.example.dao.entity.StoreEntity;
 import org.example.dao.store.StoreRepository;
+import org.example.exception.customer.CustomerInUseException;
+import org.example.exception.customer.UnkownCustomerException;
 import org.example.exception.address.UnknownAddressException;
 import org.example.exception.store.UnknownStoreException;
 import org.example.model.Customer;
@@ -82,6 +84,22 @@ public class CustomerDaoImpl implements CustomerDao {
             customerRepository.save(customerEntity);
         } catch (Exception e){
             log.error("Error while saving new Customer: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteCustomer(String email) throws UnkownCustomerException, CustomerInUseException {
+        Optional<CustomerEntity> customerEntity = Optional.ofNullable
+                (customerRepository.findFirstByEmail(email));
+        if(customerEntity.isEmpty()){
+            throw new UnkownCustomerException(String.format
+                    ("Customer with email: %s not found", email ));
+        }
+        try {
+            customerRepository.delete(customerEntity.get());
+        } catch (Exception e){
+            log.error("Error while deleting Customer: " + e.getMessage());
+            throw new CustomerInUseException(String.format("Customer: %s is used by other tables.", email));
         }
     }
 
