@@ -103,4 +103,34 @@ public class CustomerDaoImpl implements CustomerDao {
         }
     }
 
+    @Override
+    public void updateCustomer(String email, Customer customer) throws UnkownCustomerException, UnknownAddressException, UnknownStoreException {
+        Optional<CustomerEntity> customerEntity = Optional.ofNullable
+                (customerRepository.findFirstByEmail(email));
+        if(customerEntity.isEmpty()){
+            throw new UnkownCustomerException(String.format
+                    ("Customer with email: %s not found", email ));
+        }
+        CustomerEntity newCustomerEntity;
+        newCustomerEntity = CustomerEntity.builder()
+                .customerId(customerEntity.get().getCustomerId())
+                .firstName(customer.getFirstName())
+                .lastName(customer.getLastName())
+                .email(customer.getEmail())
+                .active(customer.getActive())
+                .address(queryAddress(customer.getAddress()))
+                .store(queryStore(customer.getStoreAddress()))
+                .createDate(customerEntity.get().getCreateDate())
+                .lastUpdate(new Timestamp((new Date()).getTime()))
+                .build();
+        log.info("Customer Updated: {} {}", customer.getFirstName(),
+                customer.getLastName());
+        try {
+            customerRepository.save(newCustomerEntity);
+        } catch (Exception e){
+            log.error("Error while saving new Customer: " + e.getMessage());
+        }
+
+    }
+
 }

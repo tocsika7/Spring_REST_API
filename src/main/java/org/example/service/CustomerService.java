@@ -13,4 +13,5 @@ public interface CustomerService {
     Collection<Customer> getAllCustomers();
     void createCustomer(Customer customer) throws UnknownAddressException, UnknownStoreException;
     void deleteCustomer(String email) throws UnkownCustomerException, CustomerInUseException;
+    void updateCustomer(String email, Customer customer) throws UnkownCustomerException, UnknownStoreException, UnknownAddressException;
 }

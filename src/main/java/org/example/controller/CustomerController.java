@@ -3,6 +3,7 @@ package org.example.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.controller.dto.CustomerDto;
+import org.example.controller.dto.CustomerUpdateDto;
 import org.example.exception.address.UnknownAddressException;
 import org.example.exception.customer.CustomerInUseException;
 import org.example.exception.customer.UnkownCustomerException;
@@ -59,6 +60,22 @@ public class CustomerController {
         try {
             service.deleteCustomer(email);
         } catch (UnkownCustomerException | CustomerInUseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PutMapping("/customer")
+    public void updateCustomer(@RequestBody CustomerUpdateDto customerUpdateDto){
+        try {
+            service.updateCustomer(customerUpdateDto.getCurrentEmail(), new Customer(
+                    customerUpdateDto.getStoreAddress(),
+                    customerUpdateDto.getFirstName(),
+                    customerUpdateDto.getLastName(),
+                    customerUpdateDto.getEmail(),
+                    customerUpdateDto.getAddress(),
+                    customerUpdateDto.getActive()
+            ));
+        } catch (UnkownCustomerException | UnknownStoreException | UnknownAddressException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

@@ -34,5 +34,10 @@ public class CustomerServiceImpl implements CustomerService {
         customerDao.deleteCustomer(email);
     }
 
+    @Override
+    public void updateCustomer(String email, Customer customer) throws UnkownCustomerException, UnknownStoreException, UnknownAddressException {
+        customerDao.updateCustomer(email,customer);
+    }
+
 
 }
