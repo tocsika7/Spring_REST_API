@@ -2,14 +2,14 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.controller.dto.CustomerDto;
-import org.example.controller.dto.CustomerUpdateDto;
+import org.example.controller.dto.customer.CustomerDto;
+import org.example.controller.dto.customer.CustomerUpdateDto;
 import org.example.exception.address.UnknownAddressException;
 import org.example.exception.customer.CustomerInUseException;
 import org.example.exception.customer.UnkownCustomerException;
 import org.example.exception.store.UnknownStoreException;
 import org.example.model.Customer;
-import org.example.service.CustomerService;
+import org.example.service.customer.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;

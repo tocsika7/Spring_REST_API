@@ -1,4 +1,4 @@
-package org.example.controller.dto;
+package org.example.controller.dto.store;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,11 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CityUpdateDto {
+public class StoreUpdateDto {
 
-    private String city;
-    private String newCity;
-    private String newCountry;
+    String address;
+    String newAddress;
 }

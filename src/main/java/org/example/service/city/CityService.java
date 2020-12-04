@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.city;
 
 import org.example.exception.city.CityInUseException;
 import org.example.exception.city.InvalidCityException;

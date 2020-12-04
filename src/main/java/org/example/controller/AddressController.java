@@ -2,14 +2,14 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.controller.dto.AddressDto;
-import org.example.controller.dto.AddressUpdateDto;
+import org.example.controller.dto.address.AddressDto;
+import org.example.controller.dto.address.AddressUpdateDto;
 import org.example.exception.address.AddressInUseException;
 import org.example.exception.address.InvalidAddressException;
 import org.example.exception.address.UnknownAddressException;
 import org.example.exception.city.UnknownCityException;
 import org.example.model.Address;
-import org.example.service.AddressService;
+import org.example.service.address.AddressService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;

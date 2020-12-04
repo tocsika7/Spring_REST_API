@@ -2,13 +2,13 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.controller.dto.CountryDto;
-import org.example.controller.dto.CountryUpdateDto;
+import org.example.controller.dto.country.CountryDto;
+import org.example.controller.dto.country.CountryUpdateDto;
 import org.example.exception.country.CountryInUseException;
 import org.example.exception.country.InvalidCountryException;
 import org.example.exception.country.UnknownCountryException;
 import org.example.model.Country;
-import org.example.service.CountryService;
+import org.example.service.country.CountryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;

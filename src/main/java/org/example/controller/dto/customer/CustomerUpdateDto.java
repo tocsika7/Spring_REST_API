@@ -1,4 +1,4 @@
-package org.example.controller.dto;
+package org.example.controller.dto.customer;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CountryUpdateDto extends CountryDto {
+public class CustomerUpdateDto extends CustomerDto {
 
-    private String newCountry;
+    String currentEmail;
+
 }

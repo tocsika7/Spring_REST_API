@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.address;
 
 import org.example.exception.address.AddressInUseException;
 import org.example.exception.address.InvalidAddressException;

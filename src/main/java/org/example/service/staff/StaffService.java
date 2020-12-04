@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.staff;
 
 import org.example.exception.address.UnknownAddressException;
 import org.example.exception.staff.StaffInUseException;

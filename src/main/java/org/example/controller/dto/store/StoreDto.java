@@ -1,4 +1,4 @@
-package org.example.controller.dto;
+package org.example.controller.dto.store;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.country;
 
 import org.example.exception.country.CountryInUseException;
 import org.example.exception.country.InvalidCountryException;

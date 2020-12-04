@@ -2,14 +2,14 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.controller.dto.CityDto;
-import org.example.controller.dto.CityUpdateDto;
+import org.example.controller.dto.city.CityDto;
+import org.example.controller.dto.city.CityUpdateDto;
 import org.example.exception.city.CityInUseException;
 import org.example.exception.city.InvalidCityException;
 import org.example.exception.city.UnknownCityException;
 import org.example.exception.country.UnknownCountryException;
 import org.example.model.City;
-import org.example.service.CityService;
+import org.example.service.city.CityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;

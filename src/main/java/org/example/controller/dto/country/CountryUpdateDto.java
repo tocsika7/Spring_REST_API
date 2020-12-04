@@ -1,4 +1,4 @@
-package org.example.controller.dto;
+package org.example.controller.dto.country;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StaffUpdateDto extends StaffRecordDto {
+public class CountryUpdateDto extends CountryDto {
 
-    private int staffId;
+    private String newCountry;
 }
