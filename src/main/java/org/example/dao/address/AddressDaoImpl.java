@@ -30,7 +30,7 @@ public class AddressDaoImpl implements AddressDao {
     private final AddressRepository addressRepository;
     private final CityRepository cityRepository;
 
-    protected CityEntity queryCity(String cityName) throws UnknownCityException {
+    public CityEntity queryCity(String cityName) throws UnknownCityException {
         Optional<CityEntity> cityEntity = Optional.ofNullable(cityRepository.findFirstByCity(cityName));
         if(cityEntity.isEmpty()){
             throw new UnknownCityException("City not found: " + cityName);
