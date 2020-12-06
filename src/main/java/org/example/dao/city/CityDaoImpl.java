@@ -27,12 +27,8 @@ public class CityDaoImpl implements CityDao {
     private final CityRepository cityRepository;
     private final CountryRepository countryRepository;
 
-    protected Optional<CityEntity> queryCity(City city) {
-        return StreamSupport.stream(cityRepository.findAll().spliterator(),false)
-                .filter(cityEntity -> city.getCity().equals(cityEntity.getCity())).findFirst();
-    }
 
-    protected CountryEntity queryCountry(String country) throws UnknownCountryException {
+    public CountryEntity queryCountry(String country) throws UnknownCountryException {
 
         Optional<CountryEntity> countryEntity = StreamSupport.stream(countryRepository.findAll().spliterator(),false)
                 .filter(entity -> country.equals(entity.getCountry())).findFirst();
@@ -70,7 +66,7 @@ public class CityDaoImpl implements CityDao {
 
     @Override
     public void deleteCity(City city) throws UnknownCityException, CityInUseException {
-        Optional<CityEntity> cityEntity = queryCity(city);
+        Optional<CityEntity> cityEntity = Optional.ofNullable(cityRepository.findFirstByCity(city.getCity()));
         if(cityEntity.isEmpty()){
             throw new UnknownCityException("City not found");
         }
