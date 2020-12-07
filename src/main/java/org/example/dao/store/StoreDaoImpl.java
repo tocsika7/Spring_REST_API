@@ -25,7 +25,7 @@ public class StoreDaoImpl implements StoreDao {
     private final StoreRepository storeRepository;
     private final AddressRepository addressRepository;
 
-    protected AddressEntity queryAddress(String addressName) throws UnknownAddressException {
+    public AddressEntity queryAddress(String addressName) throws UnknownAddressException {
         Optional<AddressEntity> addressEntity = Optional.ofNullable(
                 addressRepository.findFirstByAddress(addressName));
         if(addressEntity.isEmpty()){
