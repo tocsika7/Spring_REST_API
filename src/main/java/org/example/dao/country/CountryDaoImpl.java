@@ -23,10 +23,7 @@ public class CountryDaoImpl implements CountryDao {
 
     private final CountryRepository countryRepository;
 
-    private Optional<CountryEntity> queryCountry(Country country){
-        return StreamSupport.stream(countryRepository.findAll().spliterator(),false)
-                .filter(entity -> country.getCountry().equals(entity.getCountry())).findFirst();
-    }
+
 
     @Override
     public Collection<Country> readAll() {
@@ -56,7 +53,8 @@ public class CountryDaoImpl implements CountryDao {
 
     @Override
     public void deleteCountry(Country country) throws UnknownCountryException, CountryInUseException {
-        Optional<CountryEntity> countryEntity = queryCountry(country);
+        Optional<CountryEntity> countryEntity = Optional.
+                ofNullable(countryRepository.findFirstByCountry(country.getCountry()));
         if(countryEntity.isEmpty()){
             throw new UnknownCountryException(String.format("Country not found: %s", country));
         }
@@ -70,7 +68,7 @@ public class CountryDaoImpl implements CountryDao {
 
     @Override
     public void updateCountry(Country country, Country newCountry) throws UnknownCountryException, InvalidCountryException {
-        Optional<CountryEntity> countryEntity = queryCountry(country);
+        Optional<CountryEntity> countryEntity = Optional.ofNullable(countryRepository.findFirstByCountry(country.getCountry()));
         if(countryEntity.isEmpty()){
             throw new UnknownCountryException(String.format("Country not found: %s", country));
         }
