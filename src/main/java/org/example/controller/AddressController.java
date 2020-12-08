@@ -51,7 +51,7 @@ public class AddressController {
                     addressDto.getPhone()
             ));
         } catch (UnknownCityException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid city");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -83,11 +83,7 @@ public class AddressController {
                     addressDto.getPostalCode(),
                     addressDto.getPhone()
             ));
-        } catch (UnknownAddressException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (UnknownCityException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (InvalidAddressException e) {
+        } catch (UnknownAddressException | UnknownCityException | InvalidAddressException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

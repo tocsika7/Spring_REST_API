@@ -33,6 +33,7 @@ public class AddressDaoImpl implements AddressDao {
     public CityEntity queryCity(String cityName) throws UnknownCityException {
         Optional<CityEntity> cityEntity = Optional.ofNullable(cityRepository.findFirstByCity(cityName));
         if(cityEntity.isEmpty()){
+            log.error(String.format("UnknownCityException: %s not found", cityName));
             throw new UnknownCityException("City not found: " + cityName);
         }
         return cityEntity.get();
@@ -69,7 +70,7 @@ public class AddressDaoImpl implements AddressDao {
         try {
             addressRepository.save(addressEntity);
         } catch (Exception e){
-            log.error(e.getMessage());
+            log.error("Error while saving new Address: " + e.getMessage());
         }
     }
 
@@ -79,13 +80,15 @@ public class AddressDaoImpl implements AddressDao {
                 ofNullable(addressRepository.
                 findFirstByAddress(address.getAddress()));
         if(addressEntity.isEmpty()){
-            throw new UnknownAddressException("Address not found");
+            log.error(String.format("UnknownAddressException: %s not found", address.getAddress()));
+            throw new UnknownAddressException("Address not found: " + address.getAddress());
         }
         try {
             addressRepository.delete(addressEntity.get());
+            log.info(String.format("Address: %s deleted.",address.getAddress()));
         } catch (Exception e){
             log.error("Error while deleting Address: " + e.getMessage());
-            throw new AddressInUseException("Address used by an other table" + address.getAddress());
+            throw new AddressInUseException("Address: " + address.getAddress() + " is used by another table.");
         }
     }
 
@@ -95,7 +98,8 @@ public class AddressDaoImpl implements AddressDao {
                 addressRepository.findFirstByAddress(address));
         GeometryFactory geometryFactory = new GeometryFactory();
         if(addressEntity.isEmpty()){
-            throw new UnknownAddressException("Unknown address: " + address);
+            log.error(String.format("UnknownAddressException: %s not found", address));
+            throw new UnknownAddressException("Address not found: " + address);
         }
         else {
             AddressEntity newAddressEntity = AddressEntity.builder()
@@ -109,12 +113,12 @@ public class AddressDaoImpl implements AddressDao {
                     .postalCode(newAddress.getPostalCode())
                     .lastUpdate(new Timestamp((new Date()).getTime()))
                     .build();
-            log.info("Address updated" + newAddressEntity.toString());
+            log.info("Address updated: " + newAddressEntity.toString());
             try {
                 addressRepository.save(newAddressEntity);
             } catch (Exception e){
-                log.error("Error while updating Address" + e.getMessage());
-                throw new InvalidAddressException("Invalid address");
+                log.error("Error while updating Address: " + e.getMessage());
+                throw new InvalidAddressException("Invalid Address: Cant create Address with these parameters.");
             }
         }
     }
