@@ -6,6 +6,7 @@ import org.example.controller.dto.staff.StaffDto;
 import org.example.controller.dto.staff.StaffRecordDto;
 import org.example.controller.dto.staff.StaffUpdateDto;
 import org.example.exception.address.UnknownAddressException;
+import org.example.exception.staff.InvalidStaffException;
 import org.example.exception.staff.StaffInUseException;
 import org.example.exception.staff.UnknownStaffException;
 import org.example.exception.store.UnknownStoreException;
@@ -52,7 +53,7 @@ public class StaffController {
                     staffDto.getPassword(),
                     staffDto.getActive()
             ));
-        } catch (UnknownAddressException | UnknownStoreException e) {
+        } catch (UnknownAddressException | UnknownStoreException | InvalidStaffException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -70,7 +71,7 @@ public class StaffController {
                     staffUpdateDto.getPassword(),
                     staffUpdateDto.getActive()
             ));
-        } catch (UnknownAddressException | UnknownStoreException | UnknownStaffException e) {
+        } catch (UnknownAddressException | UnknownStoreException | UnknownStaffException | InvalidStaffException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

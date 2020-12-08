@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dao.staff.StaffDao;
 import org.example.exception.address.UnknownAddressException;
+import org.example.exception.staff.InvalidStaffException;
 import org.example.exception.staff.StaffInUseException;
 import org.example.exception.staff.UnknownStaffException;
 import org.example.exception.store.UnknownStoreException;
@@ -25,12 +26,12 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public void createStaffMember(Staff staff) throws UnknownAddressException, UnknownStoreException {
+    public void createStaffMember(Staff staff) throws UnknownAddressException, UnknownStoreException, InvalidStaffException {
         staffDao.createStaffMember(staff);
     }
 
     @Override
-    public void updateStaffMember(int staffId, Staff staff) throws UnknownAddressException, UnknownStaffException, UnknownStoreException {
+    public void updateStaffMember(int staffId, Staff staff) throws UnknownAddressException, UnknownStaffException, UnknownStoreException, InvalidStaffException {
         staffDao.updateStaffMember(staffId,staff);
     }
 

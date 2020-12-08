@@ -8,6 +8,7 @@ import org.example.dao.entity.StaffEntity;
 import org.example.dao.entity.StoreEntity;
 import org.example.dao.store.StoreRepository;
 import org.example.exception.address.UnknownAddressException;
+import org.example.exception.staff.InvalidStaffException;
 import org.example.exception.staff.StaffInUseException;
 import org.example.exception.staff.UnknownStaffException;
 import org.example.exception.store.UnknownStoreException;
@@ -38,7 +39,9 @@ public class StaffDaoImpl implements StaffDao {
         Optional<AddressEntity> addressEntity = Optional.ofNullable(
                 addressRepository.findFirstByAddress(addressName));
         if(addressEntity.isEmpty()){
-            throw new UnknownAddressException("Address not found " + addressName);
+            log.error(String.format("UnknownAddressException: Address: %s not found", addressName));
+            throw new UnknownAddressException(String.format
+                    ("Address not found: %s", addressName));
         }
         return addressEntity.get();
     }
@@ -47,7 +50,9 @@ public class StaffDaoImpl implements StaffDao {
         Optional<StoreEntity> storeEntity = Optional.ofNullable(
                 storeRepository.findFirstByAddress_Address(storeAddress));
         if(storeEntity.isEmpty()){
-            throw new UnknownStoreException("Store not found " + storeAddress);
+            log.error(String.format("UnknownStoreException: Store at address: %s not found", storeAddress));
+            throw new UnknownStoreException(String.format
+                    ("Store at address: %s not found.", storeAddress));
         }
         return storeEntity.get();
     }
@@ -77,7 +82,7 @@ public class StaffDaoImpl implements StaffDao {
     }
 
     @Override
-    public void createStaffMember(Staff staff) throws UnknownAddressException, UnknownStoreException {
+    public void createStaffMember(Staff staff) throws UnknownAddressException, UnknownStoreException, InvalidStaffException {
         StaffEntity staffEntity;
         try {
             staffEntity = StaffEntity.builder()
@@ -92,11 +97,12 @@ public class StaffDaoImpl implements StaffDao {
                     .active(staff.getActive())
                     .lastUpdate(new Timestamp(new Date().getTime()))
                     .build();
-            log.info("Staff member added:  " + staff.getFirstName());
+            log.info("New Staff member added:  " + staff.getFirstName());
             try {
                 staffRepository.save(staffEntity);
             } catch (Exception e) {
                 log.error("Error while saving staff member: " + e.getMessage());
+                throw new InvalidStaffException("Cant create new Staff Member with these parameters.");
             }
         } catch (SQLException e) {
             log.error("Blob factory error: " + e.getMessage());
@@ -104,7 +110,7 @@ public class StaffDaoImpl implements StaffDao {
     }
 
     @Override
-    public void updateStaffMember(int staffId, Staff staff) throws UnknownStaffException, UnknownAddressException, UnknownStoreException {
+    public void updateStaffMember(int staffId, Staff staff) throws UnknownStaffException, UnknownAddressException, UnknownStoreException, InvalidStaffException {
         Optional<StaffEntity> staffEntity = staffRepository.findById(staffId);
         if(staffEntity.isEmpty()){
             log.error(String.format("Staff with id:%d not found", staffId));
@@ -131,6 +137,7 @@ public class StaffDaoImpl implements StaffDao {
                     staffRepository.save(newStaffEntity);
                 } catch (Exception e) {
                     log.error("Error while updating Staff Member: " + e.getMessage());
+                    throw new InvalidStaffException("Cant create new Staff Member with these parameters.");
                 }
             } catch (SQLException e){
                 log.error("Blob Factory error: " + e.getMessage());
@@ -142,10 +149,12 @@ public class StaffDaoImpl implements StaffDao {
     public void deleteStaffMember(int staffId) throws UnknownStaffException, StaffInUseException {
         Optional<StaffEntity> staffEntity = staffRepository.findById(staffId);
         if(staffEntity.isEmpty()) {
+            log.error(String.format("Staff with id:%d not found", staffId));
             throw new UnknownStaffException(String.format
                     ("Staff member with id:%d not found", staffId));
         }
         try {
+            log.info(String.format("Staff Member with id: %d deleted.", staffId));
             staffRepository.delete(staffEntity.get());
         } catch (Exception e) {
             log.error("Error while deleting staff member." + e.getMessage());

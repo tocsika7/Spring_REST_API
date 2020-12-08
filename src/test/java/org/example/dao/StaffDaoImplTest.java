@@ -8,6 +8,7 @@ import org.example.dao.staff.StaffDaoImpl;
 import org.example.dao.staff.StaffRepository;
 import org.example.dao.store.StoreRepository;
 import org.example.exception.address.UnknownAddressException;
+import org.example.exception.staff.InvalidStaffException;
 import org.example.exception.staff.StaffInUseException;
 import org.example.exception.staff.UnknownStaffException;
 import org.example.exception.store.UnknownStoreException;
@@ -43,7 +44,7 @@ public class StaffDaoImplTest {
     private StoreRepository storeRepository;
 
     @Test
-    public void createStaffSuccessful() throws UnknownAddressException, UnknownStoreException {
+    public void createStaffSuccessful() throws UnknownAddressException, UnknownStoreException, InvalidStaffException {
         doReturn(AddressEntity.builder().address("1121 Loja Avenue").build())
                 .when(staffDao).queryAddress(anyString());
         doReturn(StoreEntity.builder().address(AddressEntity.builder().address("47 MySakila Drive").build()).build())
@@ -84,7 +85,7 @@ public class StaffDaoImplTest {
     }
 
     @Test
-    public void updateStaffSuccessful() throws UnknownAddressException, UnknownStoreException, UnknownStaffException {
+    public void updateStaffSuccessful() throws UnknownAddressException, UnknownStoreException, UnknownStaffException, InvalidStaffException {
         doReturn(getStaffToDelete())
                 .when(staffRepository).findById(anyInt());
         doReturn(AddressEntity.builder().address("1121 Loja Avenue").build())
