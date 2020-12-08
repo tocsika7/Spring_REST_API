@@ -6,6 +6,7 @@ import org.example.controller.dto.customer.CustomerDto;
 import org.example.controller.dto.customer.CustomerUpdateDto;
 import org.example.exception.address.UnknownAddressException;
 import org.example.exception.customer.CustomerInUseException;
+import org.example.exception.customer.InvalidCustomerException;
 import org.example.exception.customer.UnkownCustomerException;
 import org.example.exception.store.UnknownStoreException;
 import org.example.model.Customer;
@@ -50,7 +51,7 @@ public class CustomerController {
                     customerDto.getAddress(),
                     customerDto.getActive()
             ));
-        } catch (UnknownAddressException | UnknownStoreException e) {
+        } catch (UnknownAddressException | UnknownStoreException | InvalidCustomerException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -75,7 +76,7 @@ public class CustomerController {
                     customerUpdateDto.getAddress(),
                     customerUpdateDto.getActive()
             ));
-        } catch (UnkownCustomerException | UnknownStoreException | UnknownAddressException e) {
+        } catch (UnkownCustomerException | UnknownStoreException | UnknownAddressException | InvalidCustomerException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

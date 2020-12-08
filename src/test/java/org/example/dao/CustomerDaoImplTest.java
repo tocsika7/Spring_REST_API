@@ -9,6 +9,7 @@ import org.example.dao.entity.StoreEntity;
 import org.example.dao.store.StoreRepository;
 import org.example.exception.address.UnknownAddressException;
 import org.example.exception.customer.CustomerInUseException;
+import org.example.exception.customer.InvalidCustomerException;
 import org.example.exception.customer.UnkownCustomerException;
 import org.example.exception.store.UnknownStoreException;
 import org.example.model.Customer;
@@ -39,7 +40,7 @@ public class CustomerDaoImplTest {
     private StoreRepository storeRepository;
 
     @Test
-    public void createCustomerSuccessful() throws UnknownStoreException, UnknownAddressException {
+    public void createCustomerSuccessful() throws UnknownStoreException, UnknownAddressException, InvalidCustomerException {
         doReturn(StoreEntity.builder().address(AddressEntity.builder().address("47 MySakila Drive").build()).build())
                 .when(customerDao).queryStore(any());
         doReturn(AddressEntity.builder().address("1121 Loja Avenue").build())
@@ -80,7 +81,7 @@ public class CustomerDaoImplTest {
     }
 
     @Test
-    public void updateCustomerSuccessful() throws UnkownCustomerException, UnknownStoreException, UnknownAddressException {
+    public void updateCustomerSuccessful() throws UnkownCustomerException, UnknownStoreException, UnknownAddressException, InvalidCustomerException {
         doReturn(CustomerEntity.builder().email("john@gmail.com").build())
                 .when(customerRepository).findFirstByEmail(anyString());
         doReturn(StoreEntity.builder().address(AddressEntity.builder().address("47 MySakila Drive").build()).build())

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.dao.customer.CustomerDao;
 import org.example.exception.address.UnknownAddressException;
 import org.example.exception.customer.CustomerInUseException;
+import org.example.exception.customer.InvalidCustomerException;
 import org.example.exception.customer.UnkownCustomerException;
 import org.example.exception.store.UnknownStoreException;
 import org.example.model.Customer;
@@ -25,7 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void createCustomer(Customer customer) throws UnknownAddressException, UnknownStoreException {
+    public void createCustomer(Customer customer) throws UnknownAddressException, UnknownStoreException, InvalidCustomerException {
         customerDao.createCustomer(customer);
     }
 
@@ -35,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateCustomer(String email, Customer customer) throws UnkownCustomerException, UnknownStoreException, UnknownAddressException {
+    public void updateCustomer(String email, Customer customer) throws UnkownCustomerException, UnknownStoreException, UnknownAddressException, InvalidCustomerException {
         customerDao.updateCustomer(email,customer);
     }
 

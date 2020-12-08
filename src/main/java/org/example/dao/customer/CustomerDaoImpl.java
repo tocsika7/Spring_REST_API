@@ -8,6 +8,7 @@ import org.example.dao.entity.CustomerEntity;
 import org.example.dao.entity.StoreEntity;
 import org.example.dao.store.StoreRepository;
 import org.example.exception.customer.CustomerInUseException;
+import org.example.exception.customer.InvalidCustomerException;
 import org.example.exception.customer.UnkownCustomerException;
 import org.example.exception.address.UnknownAddressException;
 import org.example.exception.store.UnknownStoreException;
@@ -34,6 +35,7 @@ public class CustomerDaoImpl implements CustomerDao {
         Optional<AddressEntity> addressEntity = Optional.ofNullable(
                 addressRepository.findFirstByAddress(addressName));
         if(addressEntity.isEmpty()){
+            log.error(String.format("UnknownAddressException: Address: %s not found", addressName));
             throw new UnknownAddressException(String.format
                     ("Address not found: %s", addressName));
         }
@@ -44,6 +46,7 @@ public class CustomerDaoImpl implements CustomerDao {
         Optional<StoreEntity> storeEntity = Optional.ofNullable(
                 storeRepository.findFirstByAddress_Address(storeAddress));
         if(storeEntity.isEmpty()){
+            log.error(String.format("UnknownStoreException: Store at address: %s not found", storeAddress));
             throw new UnknownStoreException(String.format
                     ("Store at address: %s not found.", storeAddress));
         }
@@ -66,7 +69,7 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     @Override
-    public void createCustomer(Customer customer) throws UnknownAddressException, UnknownStoreException {
+    public void createCustomer(Customer customer) throws UnknownAddressException, UnknownStoreException, InvalidCustomerException {
         CustomerEntity customerEntity;
         customerEntity = CustomerEntity.builder()
                 .firstName(customer.getFirstName())
@@ -84,6 +87,7 @@ public class CustomerDaoImpl implements CustomerDao {
             customerRepository.save(customerEntity);
         } catch (Exception e){
             log.error("Error while saving new Customer: " + e.getMessage());
+            throw new InvalidCustomerException("Cant create Customer with these parameters.");
         }
     }
 
@@ -92,11 +96,13 @@ public class CustomerDaoImpl implements CustomerDao {
         Optional<CustomerEntity> customerEntity = Optional.ofNullable
                 (customerRepository.findFirstByEmail(email));
         if(customerEntity.isEmpty()){
+            log.error(String.format("UnknownCustomerException: Customer with email: %s not found",email));
             throw new UnkownCustomerException(String.format
                     ("Customer with email: %s not found", email ));
         }
         try {
             customerRepository.delete(customerEntity.get());
+            log.info(String.format("Customer with email: %s deleted.",email));
         } catch (Exception e){
             log.error("Error while deleting Customer: " + e.getMessage());
             throw new CustomerInUseException(String.format("Customer: %s is used by other tables.", email));
@@ -104,10 +110,11 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     @Override
-    public void updateCustomer(String email, Customer customer) throws UnkownCustomerException, UnknownAddressException, UnknownStoreException {
+    public void updateCustomer(String email, Customer customer) throws UnkownCustomerException, UnknownAddressException, UnknownStoreException, InvalidCustomerException {
         Optional<CustomerEntity> customerEntity = Optional.ofNullable
                 (customerRepository.findFirstByEmail(email));
         if(customerEntity.isEmpty()){
+            log.error(String.format("UnknownCustomerException: Customer with email: %s not found",email));
             throw new UnkownCustomerException(String.format
                     ("Customer with email: %s not found", email ));
         }
@@ -129,8 +136,8 @@ public class CustomerDaoImpl implements CustomerDao {
             customerRepository.save(newCustomerEntity);
         } catch (Exception e){
             log.error("Error while saving new Customer: " + e.getMessage());
+            throw new InvalidCustomerException("Cant create Customer with these parameters.");
         }
-
     }
 
 }
