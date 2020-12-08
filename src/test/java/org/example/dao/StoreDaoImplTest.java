@@ -6,6 +6,7 @@ import org.example.dao.entity.StoreEntity;
 import org.example.dao.store.StoreDaoImpl;
 import org.example.dao.store.StoreRepository;
 import org.example.exception.address.UnknownAddressException;
+import org.example.exception.store.InvalidStoreException;
 import org.example.exception.store.UnknownStoreException;
 import org.example.model.Store;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ public class StoreDaoImplTest {
     }
 
     @Test
-    public void updateStoreAddressSuccessful() throws UnknownAddressException, UnknownStoreException {
+    public void updateStoreAddressSuccessful() throws UnknownAddressException, UnknownStoreException, InvalidStoreException {
         doReturn(StoreEntity.builder().
                 address(AddressEntity.builder().address("808 Bhopal Manor").build()).build())
                 .when(storeRepository).findFirstByAddress_Address(any());

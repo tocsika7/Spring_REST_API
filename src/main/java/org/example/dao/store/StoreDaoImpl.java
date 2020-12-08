@@ -6,6 +6,7 @@ import org.example.dao.address.AddressRepository;
 import org.example.dao.entity.AddressEntity;
 import org.example.dao.entity.StoreEntity;
 import org.example.exception.address.UnknownAddressException;
+import org.example.exception.store.InvalidStoreException;
 import org.example.exception.store.UnknownStoreException;
 import org.example.model.Store;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class StoreDaoImpl implements StoreDao {
         Optional<AddressEntity> addressEntity = Optional.ofNullable(
                 addressRepository.findFirstByAddress(addressName));
         if(addressEntity.isEmpty()){
+            log.error(String.format("UnknownAddressException: Address not found: %s", addressName));
             throw new UnknownAddressException(String.format
                     ("Address not found: %s", addressName));
         }
@@ -48,6 +50,7 @@ public class StoreDaoImpl implements StoreDao {
     public Store readById(int storeId) throws UnknownStoreException {
         Optional<StoreEntity> storeEntity = storeRepository.findById(storeId);
         if(storeEntity.isEmpty()){
+            log.error(String.format("UnknownStoreException: Store with id:%d not found.", storeId));
             throw new UnknownStoreException(String.format("Store with id:%d not found.", storeId));
         }
         return new Store(
@@ -56,11 +59,13 @@ public class StoreDaoImpl implements StoreDao {
     }
 
     @Override
-    public void updateStoreAddress(String currentAddress, String newAddress) throws UnknownStoreException, UnknownAddressException {
+    public void updateStoreAddress(String currentAddress, String newAddress) throws UnknownStoreException, UnknownAddressException, InvalidStoreException {
         Optional<StoreEntity> storeEntity = Optional.ofNullable(
                 storeRepository.findFirstByAddress_Address(currentAddress));
-        if(storeEntity.isEmpty())
+        if(storeEntity.isEmpty()) {
+            log.error(String.format("UnknownStoreException: Store at %s not found.", currentAddress));
             throw new UnknownStoreException(String.format("Store at %s not found.", currentAddress));
+        }
         else {
             StoreEntity newStoreEntity = StoreEntity.builder()
                     .storeId(storeEntity.get().getStoreId())
@@ -70,8 +75,10 @@ public class StoreDaoImpl implements StoreDao {
                     .build();
             try {
                 storeRepository.save(newStoreEntity);
+                log.info(String.format("Store with id %d updated.", storeEntity.get().getStoreId()));
             } catch (Exception e){
                 log.error("Error while updating Store Address: " + e.getMessage());
+                throw new InvalidStoreException("Cant update Store with these parameters");
             }
         }
     }

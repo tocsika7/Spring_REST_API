@@ -2,6 +2,7 @@ package org.example.service.store;
 
 
 import org.example.exception.address.UnknownAddressException;
+import org.example.exception.store.InvalidStoreException;
 import org.example.exception.store.UnknownStoreException;
 import org.example.model.Store;
 
@@ -11,5 +12,5 @@ public interface StoreService {
 
     Collection<Store> readAll();
     Store readById(int storeId) throws UnknownStoreException;
-    void updateStoreAddress(String currentAddress, String newAddress) throws UnknownAddressException, UnknownStoreException;
+    void updateStoreAddress(String currentAddress, String newAddress) throws UnknownAddressException, UnknownStoreException, InvalidStoreException;
 }
