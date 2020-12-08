@@ -49,11 +49,8 @@ public class CountryController {
         try{
             countryService.deleteCountry(new Country(countryDto.getCountry()));
         }
-        catch (UnknownCountryException e) {
+        catch (UnknownCountryException | CountryInUseException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
-        catch (CountryInUseException e){
-            throw  new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 

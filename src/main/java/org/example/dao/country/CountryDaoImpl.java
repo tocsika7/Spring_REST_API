@@ -46,8 +46,8 @@ public class CountryDaoImpl implements CountryDao {
         try{
             countryRepository.save(countryEntity);
         } catch (Exception e){
-            log.error(e.getMessage());
-            throw new InvalidCountryException("Invalid country name");
+            log.error("Error while saving new Country: " + e.getMessage());
+            throw new InvalidCountryException("Cant create Country with these parameters.");
         }
     }
 
@@ -56,13 +56,15 @@ public class CountryDaoImpl implements CountryDao {
         Optional<CountryEntity> countryEntity = Optional.
                 ofNullable(countryRepository.findFirstByCountry(country.getCountry()));
         if(countryEntity.isEmpty()){
+            log.error(String.format("UnknownCountryException: Country not found: %s", country));
             throw new UnknownCountryException(String.format("Country not found: %s", country));
         }
         try {
+            log.info(String.format("Country %s deleted.", country.getCountry()));
             countryRepository.delete(countryEntity.get());
         } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new CountryInUseException("Country is used in an other table");
+            log.error(String.format("Error: Country %s is used by another table.", country.getCountry()));
+            throw new CountryInUseException(String.format("Country %s is used by another table.", country.getCountry()));
         }
     }
 
@@ -70,7 +72,8 @@ public class CountryDaoImpl implements CountryDao {
     public void updateCountry(Country country, Country newCountry) throws UnknownCountryException, InvalidCountryException {
         Optional<CountryEntity> countryEntity = Optional.ofNullable(countryRepository.findFirstByCountry(country.getCountry()));
         if(countryEntity.isEmpty()){
-            throw new UnknownCountryException(String.format("Country not found: %s", country));
+            log.error(String.format("UnknownCountryException: Country not found: %s", country.getCountry()));
+            throw new UnknownCountryException(String.format("Country not found: %s", country.getCountry()));
         }
         else {
             CountryEntity newCountryEntity = CountryEntity.builder()
@@ -78,12 +81,12 @@ public class CountryDaoImpl implements CountryDao {
                     .country(newCountry.getCountry())
                     .lastUpdate(new Timestamp(new Date().getTime()))
                     .build();
-            log.info("CountryEntity Created: {}", countryEntity);
+            log.info("CountryEntity Created: {}", countryEntity.get());
             try {
                 countryRepository.save(newCountryEntity);
             } catch (Exception e) {
-                log.error(e.getMessage());
-                throw new InvalidCountryException("Invalid country name");
+                log.error("Error while saving new Country: " + e.getMessage());
+                throw new InvalidCountryException("Cant create Country with these parameters.");
             }
         }
     }
