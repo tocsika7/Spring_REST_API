@@ -25,7 +25,7 @@ public class CityController {
     private final CityService cityService;
 
     @GetMapping("/city")
-    public Collection<CityDto> listAllCountries(){
+    public Collection<CityDto> listAllCities(){
         return cityService.getAllCities()
                 .stream()
                 .map(model -> CityDto.builder()
@@ -40,11 +40,8 @@ public class CityController {
         try {
             cityService.recordCity(new City(cityDto.getCity(), cityDto.getCountry()));
         }
-        catch (InvalidCityException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid city");
-        }
-        catch (UnknownCountryException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown country");
+        catch (InvalidCityException | UnknownCountryException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
 
 
@@ -54,9 +51,7 @@ public class CityController {
     public void deleteCity(@RequestBody CityDto cityDto){
         try {
             cityService.deleteCity(new City(cityDto.getCity(), cityDto.getCountry()));
-        } catch (CityInUseException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        } catch (UnknownCityException e) {
+        } catch (CityInUseException | UnknownCityException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -68,12 +63,8 @@ public class CityController {
                     cityUpdateDto.getCity(),
                     new City(cityUpdateDto.getNewCity(),
                             cityUpdateDto.getNewCountry()));
-        } catch (UnknownCountryException e) {
+        } catch (UnknownCountryException | InvalidCityException | UnknownCityException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (UnknownCityException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        } catch (InvalidCityException e) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, e.getMessage());
         }
 
     }

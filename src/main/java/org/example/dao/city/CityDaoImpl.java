@@ -33,7 +33,8 @@ public class CityDaoImpl implements CityDao {
         Optional<CountryEntity> countryEntity = StreamSupport.stream(countryRepository.findAll().spliterator(),false)
                 .filter(entity -> country.equals(entity.getCountry())).findFirst();
         if(countryEntity.isEmpty()){
-            throw new UnknownCountryException("No country with this id");
+            log.error(String.format("UnknownCountryException: Country: %s not found.", country));
+            throw new UnknownCountryException(String.format("Country: %s not found.", country));
         }
         return countryEntity.get();
     }
@@ -55,12 +56,12 @@ public class CityDaoImpl implements CityDao {
                 .country(queryCountry(city.getCountry()))
                 .lastUpdate(new Timestamp((new Date()).getTime()))
                 .build();
-        log.info("CityEntity: {}", cityEntity.toString());
+        log.info("CityEntity created: {}", cityEntity.toString());
         try{
             cityRepository.save(cityEntity);
         } catch (Exception e){
-            log.error(e.getMessage());
-            throw new InvalidCityException();
+            log.error("Error while saving new City: " + e.getMessage());
+            throw new InvalidCityException("Error while Saving City: " + city.getCity());
         }
     }
 
@@ -68,13 +69,15 @@ public class CityDaoImpl implements CityDao {
     public void deleteCity(City city) throws UnknownCityException, CityInUseException {
         Optional<CityEntity> cityEntity = Optional.ofNullable(cityRepository.findFirstByCity(city.getCity()));
         if(cityEntity.isEmpty()){
-            throw new UnknownCityException("City not found");
+            log.error(String.format("UnknownCityException: City %s not found", city.getCity()));
+            throw new UnknownCityException(String.format("City: %s not found.", city.getCity()));
         }
         try {
+            log.info(String.format("City: %s deleted.", city.getCity()));
             cityRepository.delete(cityEntity.get());
         } catch (Exception e){
-            log.error(e.getMessage());
-            throw new CityInUseException("City is used be an other table");
+            log.error("Error while deleting city: " + e.getMessage());
+            throw new CityInUseException("City: " + city.getCity() + " is used by another table");
         }
 
     }
@@ -83,7 +86,8 @@ public class CityDaoImpl implements CityDao {
     public void updateCity(String cityName, City newCity) throws UnknownCityException, UnknownCountryException, InvalidCityException {
         Optional<CityEntity> cityEntity = Optional.ofNullable(cityRepository.findFirstByCity(cityName));
         if(cityEntity.isEmpty()){
-            throw new UnknownCityException("City not found");
+            log.error(String.format("UnknownCityException: City %s not found", cityName));
+            throw new UnknownCityException(String.format("City: %s not found.", cityName));
         }
         else {
             CityEntity newCityEntity = CityEntity.builder()
@@ -92,12 +96,12 @@ public class CityDaoImpl implements CityDao {
                     .country(queryCountry(newCity.getCountry()))
                     .lastUpdate(new Timestamp((new Date()).getTime()))
                     .build();
-            log.info("CityEntity Updated:" + newCityEntity.toString());
             try{
+                log.info("CityEntity Updated:" + newCityEntity.toString());
                 cityRepository.save(newCityEntity);
             } catch (Exception e){
                 log.error("Error while updating city: " + e.getMessage());
-                throw new InvalidCityException();
+                throw new InvalidCityException("Cant create City with these parameters.");
             }
         }
 
