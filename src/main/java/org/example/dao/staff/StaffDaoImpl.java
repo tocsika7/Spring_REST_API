@@ -34,7 +34,7 @@ public class StaffDaoImpl implements StaffDao {
     private final AddressRepository addressRepository;
     private final StoreRepository storeRepository;
 
-    protected AddressEntity queryAddress(String addressName) throws UnknownAddressException {
+    public AddressEntity queryAddress(String addressName) throws UnknownAddressException {
         Optional<AddressEntity> addressEntity = Optional.ofNullable(
                 addressRepository.findFirstByAddress(addressName));
         if(addressEntity.isEmpty()){
@@ -43,7 +43,7 @@ public class StaffDaoImpl implements StaffDao {
         return addressEntity.get();
     }
 
-    protected StoreEntity queryStore(String storeAddress) throws UnknownStoreException {
+    public StoreEntity queryStore(String storeAddress) throws UnknownStoreException {
         Optional<StoreEntity> storeEntity = Optional.ofNullable(
                 storeRepository.findFirstByAddress_Address(storeAddress));
         if(storeEntity.isEmpty()){
